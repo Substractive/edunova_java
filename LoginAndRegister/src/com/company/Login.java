@@ -66,38 +66,37 @@ public class Login extends JFrame
             @Override
             public void actionPerformed(ActionEvent e){
                     doLogin();
-                    System.out.println("BTN KLIK1");
             }
         });
     }
 
     // metoda koja se poziva na submit btn
     public void doLogin(){
-        System.out.println("LOGIN");
         String str1 = emailInput.getText();
        
         String password = new String(this.passwordInput.getPassword());
-        password = BCrypt.hashpw(password,BCrypt.gensalt(10));
-      
-        System.out.println("Email:" + str1);
-        System.out.println("Password:" +password);
-
-
-        if(provjeriPrijavu(str1,password)){
+        User logUser = provjeriPrijavu(str1,password);
+        if( logUser != null){
             // user je provjeren i sve ok.
             // ugasi window i idi dalje u app
             this.dispose();
-            this.reference.index();
+            this.reference.index(logUser);
         }
     }
 
-    private boolean provjeriPrijavu(String email, String password){
+    private User provjeriPrijavu(String email, String password){
 
         // neka vrsta provjere
         // na bazu da li postoji taj user i ako password odgovara
         // vrati true i idi dalje u app
+        Baza database = reference.getDatabase();
+        User loggedInUser = database.getUser(email,password);
+        if(loggedInUser != null){
+            return loggedInUser;
+        }
 
-        return true;
+        return null;
+
     }
 
 }

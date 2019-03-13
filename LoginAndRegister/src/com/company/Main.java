@@ -5,8 +5,8 @@ public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-
-        Manager manager = new Manager();
+        Baza baza = Baza.getInstance();
+        Manager manager = new Manager(baza);
 
         manager.openRegister();
 

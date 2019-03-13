@@ -71,14 +71,10 @@ public class Register extends JFrame {
         String password = new String(this.passwordInput.getPassword());
         String repeatPassword = new String(this.passwordRepeatInput.getPassword());
 
-        System.out.println("Email:" + str1);
-        System.out.println("Password:" +password);
-        System.out.println("Password repeated:" +repeatPassword);
-
         if(password.equals(repeatPassword)){ // Passwordi su jednaki
 
             password = BCrypt.hashpw(password,BCrypt.gensalt(10));
-            System.out.println("Hashed password:" + password);
+            //System.out.println("Hashed password:" + password);
 
             if(this.saveUser(str1,password)){
                 int buttonClicked = JOptionPane.showConfirmDialog(
@@ -105,7 +101,16 @@ public class Register extends JFrame {
 
         // spremanje u bazu ili server...
 
-        return true;
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setPassword(password);
+
+        Baza database = reference.getDatabase();
+        if(database.saveUser(newUser)){
+            return true;
+        }
+
+        return false;
     }
 
 
